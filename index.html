@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPSPI - Bandung Public Service & Population Insights</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Urbanist:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. GLOBAL STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #FFFCF5; 
+            color: #1a1a1a;
+            overflow-x: hidden;
+            font-family: 'Urbanist', sans-serif;
+        }
+
+        /* Font Definitions */
+        .font-serif { font-family: 'Times New Roman', Times, serif; font-style: italic; }
+        .font-urbanist { font-family: 'Urbanist', sans-serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding-top: 0; 
+        }
+
+        /* --- HEADER LOGO (FIXED) --- */
+        .main-header {
+            position: fixed;
+            top: 20px;
+            left: 5%;
+            z-index: 1000;
+        }
+        .header-logo-img {
+            width: 250px; 
+            height: auto;
+        }
+
+        /* --- BUTTON "BACK TO HOME" --- */
+        .back-to-home-btn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            cursor: pointer;
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+            display: none; /* Hidden by default via JS */
+        }
+        
+        .back-to-home-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            /* Memutar gambar panel agar sikunya pas di pojok kiri atas */
+            transform: rotate(-90deg); 
+            transform-origin: center;
+        }
+
+        /* ================= SECTION 1: HOME ================= */
+        #home {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 220px; /* Ruang untuk navigasi */
+            padding-top: 100px;
+        }
+
+        .home-content h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .home-content h2 {
+            font-size: 64px;
+            line-height: 1.1;
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+
+        /* --- NAVIGATION BAR (PANELS) - FIXED ALIGNMENT & GAPS --- */
+        .home-nav-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1100px; /* Lebar maksimal agar tidak terlalu melar */
+            /* MENENTUKAN TINGGI PASTI agar semua sejajar */
+            height: 180px; 
+            display: flex;
+            /* 'stretch' memaksa semua item (panel & filler) punya tinggi yg sama persis */
+            align-items: stretch; 
+        }
+
+        .nav-item {
+            flex: 1; /* Panel utama mengambil sisa ruang secara merata */
+            position: relative;
+            transition: transform 0.3s;
+            height: 100%; /* Pastikan kontainer mengisi tinggi penuh */
+        }
+
+        .nav-item img {
+            width: 100%;
+            height: 100%; /* Paksa gambar mengisi tinggi kontainer */
+            /* 'fill' memaksa gambar mengisi seluruh ruang tanpa celah, memastikan kesejajaran */
+            object-fit: fill; 
+            display: block;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-20px); /* Efek naik saat hover */
+            z-index: 10;
+        }
+
+        /* Segitiga Abu (Filler) */
+        .nav-filler {
+            /* Menggunakan flex-basis untuk lebar yang konsisten */
+            flex: 0 0 7%; 
+            position: relative;
+            z-index: 1;
+            height: 100%; /* Isi tinggi penuh */
+        }
+        .nav-filler img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; /* Paksa isi ruang agar tidak ada celah */
+            display: block;
+            /* Skala vertikal sedikit untuk memastikan bagian bawah tertutup rapat */
+            transform: scaleY(1.02); 
+            transform-origin: bottom;
+        }
+
+        /* ================= SECTION 2: ABOUT ================= */
+        #about {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 150px 5% 100px 5%;
+        }
+
+        .about-left { width: 50%; padding-right: 50px; }
+        .about-right { width: 45%; display: flex; flex-direction: column; align-items: center; }
+
+        .about-title {
+            font-size: 80px;
+            line-height: 1;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        .about-tagline {
+            display: inline-block;
+            background-color: #e0e0e0;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', Times, serif; font-style: italic;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .about-desc-box {
+            background-color: #dcdcdc;
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .grand-logo-title {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .grand-logo-img {
+            width: 80%;
+            max-width: 350px;
+            height: auto;
+            margin-bottom: 40px;
+            mix-blend-mode: multiply; 
+        }
+
+        .legend-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            align-items: flex-end; 
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 20px; }
+        .legend-text {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 24px;
+            text-align: right;
+        }
+
+        /* Ikon Legend */
+        .legend-icon { width: 50px; height: auto; object-fit: contain; }
+        .legend-icon.populasi { width: 60px; }
+
+        /* ================= SECTION 3: MAP CATEGORIES ================= */
+        #map {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-header {
+            position: absolute;
+            top: 120px;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+        .map-header h2 { font-size: 60px; line-height: 0.9; }
+
+        .categories-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            padding-top: 150px; 
+        }
+
+        .category-card {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: flex 0.3s ease;
+            text-decoration: none;
+        }
+        .category-card:hover { flex: 1.2; }
+
+        /* Gradients Background */
+        .cat-orange { background: linear-gradient(to right, #cc7000, #ffba59 50%, #FFFCF5); }
+        .cat-green { background: linear-gradient(to right, #FFFCF5, #a3ebb1 50%, #FFFCF5); }
+        .cat-blue { background: linear-gradient(to left, #0033CC, #7fa0ff 50%, #FFFCF5); }
+
+        .cat-main-icon {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 80px;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));
+        }
+        .category-card:hover .cat-main-icon { transform: scale(1.1); }
+
+        .cat-btn {
+            position: absolute;
+            bottom: 20%;
+            background: black;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-family: 'Urbanist', sans-serif;
+            font-size: 14px;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-style: italic;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* ================= SECTION 4: THANK YOU ================= */
+        #thankyou {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding-bottom: 250px;
+            padding-top: 100px;
+        }
+
+        .ty-title { font-size: 72px; margin-bottom: 30px; }
+        
+        /* Dekorasi Kutipan */
+        .quote-deco {
+            width: 100px;
+            margin-bottom: 20px;
+            margin-left: 60%;
+            opacity: 0.5;
+            transform: rotate(180deg); 
+        }
+
+        .ty-desc {
+            width: 60%;
+            max-width: 700px;
+            margin: 0 auto 50px auto;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .comment-box-wrapper {
+            position: relative;
+            width: 50%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 15px 50px 15px 25px;
+            border: 2px solid #ccc;
+            border-radius: 30px;
+            font-family: 'Urbanist', sans-serif;
+            outline: none;
+            background: transparent;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Footer Deco */
+        .footer-deco {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 150px;
+            display: flex; z-index: -1;
+        }
+        .deco-shape { flex: 1; height: 100%; }
+        .deco-1 { background: #dcd0e8; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
+        .deco-2 { background: #faddbb; clip-path: polygon(0 100%, 0 0, 100% 100%); }
+        .deco-3 { background: #e8f5d6; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .deco-4 { background: #e8f5d6; clip-path: polygon(0 100%, 100% 0, 100% 100%); }
+        .deco-5 { background: #faddbb; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+
+    </style>
+</head>
+<body class="font-urbanist">
+
+    <div class="main-header">
+        <img src="logo-header.png" alt="BPSPI Header Logo" class="header-logo-img">
+    </div>
+
+    <a href="#home" class="back-to-home-btn" id="backBtn">
+        <img src="panel-home.png" alt="Back to Home">
+    </a>
+
+    <section id="home">
+        <div class="container home-content">
+            <h4 class="font-urbanist">welcome to <strong>BPSPI!</strong></h4>
+            <h2 class="font-serif">Visualisasi Spasial</h2>
+            <h2 class="font-serif">Kependudukan &</h2>
+            <h2 class="font-serif">Layanan Publik Bandung.</h2>
+        </div>
+
+        <div class="home-nav-container">
+            <a href="#home" class="nav-item">
+                <img src="panel-home.png" alt="Home">
+            </a>
+
+            <div class="nav-filler">
+                <img src="panel-filler.png" alt="separator">
+            </div>
+
+            <a href="#about" class="nav-item">
+                <img src="panel-about.png" alt="About">
+            </a>
+
+            <div class="nav-filler">
+                <img src="panel-filler.png" alt="separator">
+            </div>
+
+            <a href="#map" class="nav-item">
+                <img src="panel-map.png" alt="Map Categories">
+            </a>
+
+            <div class="nav-filler">
+                <img src="panel-filler.png" alt="separator">
+            </div>
+
+            <a href="#thankyou" class="nav-item">
+                <img src="panel-thankyou.png" alt="Thank You">
+            </a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-left">
+            <h2 class="font-serif about-title">About BPSPI</h2>
+            <div class="about-tagline">Bandung Public Service & Population Insights</div>
+            <div class="about-desc-box font-montserrat">
+                <strong>platform WebGIS</strong> yang menyajikan informasi <em>kependudukan</em> dan <em>layanan publik</em> di <strong>Kabupaten dan Kota Bandung</strong> secara interaktif dan berbasis spasial, dengan menampilkan <strong>peta kepadatan penduduk</strong>, persebaran <strong>fasilitas pendidikan</strong>, serta <strong>fasilitas kesehatan</strong> sebagai sarana pendukung analisis dan pemahaman kondisi wilayah.
+            </div>
+        </div>
+
+        <div class="about-right">
+            <h3 class="grand-logo-title">grand<br>logo</h3>
+            
+            <img src="grand-logo.jpg" alt="Grand Logo" class="grand-logo-img">
+
+            <div class="legend-container">
+                <div class="legend-item">
+                    <span class="legend-text">kesehatan</span>
+                    <img src="icon-kesehatan.png" alt="Icon Kesehatan" class="legend-icon">
+                </div>
+                <div class="legend-item">
+                    <span class="legend-text">pendidikan</span>
+                    <img src="icon-pendidikan.png" alt="Icon Pendidikan" class="legend-icon">
+                </div>
+                <div class="legend-item">
+                    <span class="legend-text">populasi<br>penduduk</span>
+                    <img src="icon-populasi.png" alt="Icon Populasi" class="legend-icon populasi">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="map">
+        <div class="map-header">
+            <h2 class="font-serif">Choose your<br>Map Categories!</h2>
+        </div>
+
+        <div class="categories-container">
+            <a href="https://github.com/USERNAME/REPO_POPULASI" target="_blank" class="category-card cat-orange">
+                <img src="icon-populasi.png" alt="Populasi" class="cat-main-icon">
+                <div class="cat-btn">populasi penduduk</div>
+            </a>
+
+            <a href="https://arachmats1.github.io/Bandung-Kesehatan-WebGIS/" target="_blank" class="category-card cat-green">
+                <img src="icon-kesehatan.png" alt="Kesehatan" class="cat-main-icon">
+                <div class="cat-btn">fasilitas kesehatan</div>
+            </a>
+
+            <a href="https://github.com/USERNAME/REPO_PENDIDIKAN" target="_blank" class="category-card cat-blue">
+                <img src="icon-pendidikan.png" alt="Pendidikan" class="cat-main-icon">
+                <div class="cat-btn">fasilitas pendidikan</div>
+            </a>
+        </div>
+        
+        <div class="click-hint">* pilih & klik</div>
+    </section>
+
+    <section id="thankyou">
+        <div class="container">
+            <img src="panel-thankyou.png" class="quote-deco" alt="quote">
+
+            <h2 class="font-serif ty-title">Terimakasih!</h2>
+            
+            <p class="ty-desc font-montserrat">
+                Kami mengucapkan terimakasih atas kunjungan anda, kami berharap platform ini berguna bagi anda. dan untuk mendukung kemajuan dari lama ini, kami mengharapkan saran anda yang dapat membangun lagi laman ini menjadi lebih baik.
+            </p>
+
+            <div class="comment-box-wrapper">
+                <input type="text" class="comment-input" placeholder="tuliskan pendapat dan saranmu yang baik disini ya ...">
+                <button class="send-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer-deco">
+            <div class="deco-shape deco-1"></div>
+            <div class="deco-shape deco-2"></div>
+            <div class="deco-shape deco-3"></div>
+            <div class="deco-shape deco-4"></div>
+            <div class="deco-shape deco-5"></div>
+        </div>
+    </section>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const homeSection = document.getElementById('home');
+            const backBtn = document.getElementById('backBtn');
+            const homeBottom = homeSection.getBoundingClientRect().bottom;
+
+            if (homeBottom < 0) {
+                backBtn.style.display = 'block';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+
