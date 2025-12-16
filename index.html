@@ -291,12 +291,14 @@
 
         /* ================= SECTION 4: THANK YOU ================= */
         #thankyou {
-            justify-content: center;
+            justify-content: flex-start; /* Stack elements from top */
             align-items: center;
             text-align: center;
             position: relative;
-            padding-bottom: 250px;
             padding-top: 100px;
+            /* Remove absolute bottom padding, allow content to flow */
+            height: auto;
+            min-height: 100vh;
         }
 
         .ty-title { font-size: 72px; margin-bottom: 30px; }
@@ -345,11 +347,15 @@
             cursor: pointer;
         }
         
-        /* Footer Deco */
+        /* FOOTER DECO (Middle Separator) */
         .footer-deco {
-            position: absolute;
-            bottom: 0; left: 0; width: 100%; height: 150px;
-            display: flex; z-index: -1;
+            position: relative; /* Changed from absolute to flow relative */
+            width: 100%;
+            height: 180px;
+            display: flex;
+            margin-top: 80px; /* Jarak dari input box */
+            margin-bottom: 50px; /* Jarak ke Meet The Team */
+            z-index: 1;
         }
         .deco-shape { flex: 1; height: 100%; }
         .deco-1 { background: #dcd0e8; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
@@ -358,6 +364,48 @@
         .deco-4 { background: #e8f5d6; clip-path: polygon(0 100%, 100% 0, 100% 100%); }
         .deco-5 { background: #faddbb; clip-path: polygon(0 0, 100% 0, 100% 100%); }
 
+        /* MEET THE TEAM SECTION */
+        .team-section {
+            width: 100%;
+            padding-bottom: 80px;
+            text-align: center;
+        }
+
+        .team-title {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 48px;
+            margin-bottom: 40px;
+        }
+
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .member-name {
+            font-family: 'Urbanist', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .member-nim {
+            font-family: 'Urbanist', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: #444;
+        }
 
         /* =========================================
            MOBILE RESPONSIVE TWEAKS (MEDIA QUERY)
@@ -369,23 +417,23 @@
             
             /* Header */
             .main-header { top: 15px; left: 15px; }
-            .header-logo-img { width: 150px; } /* Logo lebih kecil */
-            .back-to-home-btn { width: 70px; height: 70px; } /* Tombol back lebih kecil */
+            .header-logo-img { width: 150px; } 
+            .back-to-home-btn { width: 70px; height: 70px; } 
 
             /* Home Section */
             #home { padding-top: 150px; padding-bottom: 120px; }
-            .home-content h2 { font-size: 32px; } /* Judul lebih kecil */
+            .home-content h2 { font-size: 32px; } 
             
             /* Navigasi Home di HP */
             .home-nav-container {
-                height: 100px; /* Panel lebih pendek */
-                width: 100%; /* Penuhi layar */
+                height: 100px; 
+                width: 100%; 
             }
-            .nav-item:hover { transform: none; } /* Hilangkan efek hover di HP */
+            .nav-item:hover { transform: none; } 
 
             /* About Section */
             #about { 
-                flex-direction: column; /* Susun ke bawah */
+                flex-direction: column; 
                 padding-top: 100px;
                 padding-bottom: 50px;
             }
@@ -403,14 +451,14 @@
             .map-header h2 { font-size: 36px; }
             
             .categories-container {
-                flex-direction: column; /* Susun kartu ke bawah */
+                flex-direction: column; 
                 height: auto;
                 padding-top: 180px;
             }
             
             .category-card {
                 width: 100%;
-                height: 300px; /* Tinggi per kartu di HP */
+                height: 300px; 
                 border-bottom: 1px solid rgba(0,0,0,0.1);
             }
             
@@ -420,7 +468,7 @@
             }
             .category-card:hover .cat-main-icon { transform: scale(1.05); }
             
-            /* Background Gradient untuk HP (Atas ke Bawah) */
+            /* Background Gradient untuk HP */
             .cat-orange { background: linear-gradient(to bottom, #FFFCF5, #ffba59 50%, #cc7000); }
             .cat-green { background: linear-gradient(to bottom, #FFFCF5, #a3ebb1 50%, #FFFCF5); }
             .cat-blue { background: linear-gradient(to bottom, #FFFCF5, #7fa0ff 50%, #0033CC); }
@@ -428,10 +476,17 @@
             .click-hint { bottom: 20px; }
 
             /* Thank You Section */
-            #thankyou { padding-top: 50px; }
+            #thankyou { padding-top: 50px; height: auto; }
             .ty-title { font-size: 40px; }
             .ty-desc { width: 90%; font-size: 14px; }
             .comment-box-wrapper { width: 90%; }
+            
+            /* Footer Deco Mobile */
+            .footer-deco { height: 100px; margin-top: 50px; margin-bottom: 30px; }
+
+            /* Meet The Team Mobile */
+            .team-grid { flex-direction: column; gap: 30px; }
+            .team-title { font-size: 36px; margin-bottom: 20px; }
         }
 
     </style>
@@ -569,6 +624,28 @@
             <div class="deco-shape deco-4"></div>
             <div class="deco-shape deco-5"></div>
         </div>
+
+        <div class="team-section">
+            <h2 class="team-title">meet the team!</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-name">Muh Sadiq</div>
+                    <div class="member-nim">(5016221034)</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Abdullah Rachmat S.</div>
+                    <div class="member-nim">(5016221064)</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Adhiyatma Srinarbito</div>
+                    <div class="member-nim">(5016221109)</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Aulia Fithani Maziya</div>
+                    <div class="member-nim">(5016221117)</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <script>
@@ -586,3 +663,4 @@
     </script>
 </body>
 </html>
+
